@@ -180,7 +180,6 @@ fn bool Game.tcheck_guess(&self)
             break;
 		}
 	}
-    used.free();
     return false;
 }
 
