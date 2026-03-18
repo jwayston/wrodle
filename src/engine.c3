@@ -121,7 +121,6 @@ fn void? Game.init(&self, Allocator* alloc, usz word_len)
         if (catch err = word) return err~;
         self.word = word.copy(*alloc);
     };
-    self.hit_mask.init(*alloc, word_len);
 
     self.round = 1;
     mem::set(&self.used_chars, ' ', self.used_chars.len);
@@ -145,6 +144,7 @@ fn bool Game.tcheck_guess(&self)
 {
     List {bool} used;
     used.tinit(self.word_len);
+    self.hit_mask.tinit(self.word_len);
     usz hit_count = 0;
 
 	// Find exact matches
@@ -247,7 +247,6 @@ fn void Game.tset_guess(&self, String* guess)
 fn void Game.free(&self)
 {
     self.word.free(*self.alloc);
-    self.hit_mask.free();
 }
 
 
