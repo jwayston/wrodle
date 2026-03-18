@@ -98,7 +98,7 @@ fn String? trandom_word_from_file(String* filename, usz word_len)
 
     // Pick random line and return
     uint word_no = random::rand(file_content_lines.len - 1);
-    String result = file_content_lines[word_no].copy(tmem);
+    String result = file_content_lines[word_no].tcopy();
     return is_word_valid(&result, word_len, word_len) ? result : INVALID_WORD~;
 }
 
