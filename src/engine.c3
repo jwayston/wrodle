@@ -234,10 +234,11 @@ fn void Game.print_guess(&self)
     @param guess : "Guess to be checked"
     @ensure guess.len == self.word_len
 *>
-fn void Game.tset_guess(&self, String* guess)
+fn void Game.set_guess(&self, String* guess)
 {
+    self.guess.free(*self.alloc);
     guess.convert_to_upper();
-	self.guess = guess.tcopy();
+	self.guess = guess.copy(*self.alloc);
     self.round++;
 }
 
@@ -246,6 +247,7 @@ fn void Game.tset_guess(&self, String* guess)
 *>
 fn void Game.free(&self)
 {
+    self.guess.free(*self.alloc);
     self.word.free(*self.alloc);
 }
 

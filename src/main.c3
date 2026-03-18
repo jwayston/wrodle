@@ -31,7 +31,7 @@ fn int main(String[] args)
         String prompt = string::tformat("Guess %s: ", g.round);
 		String input = engine::tuser_input(&prompt, g.word_len, g.word_len);
 
-        g.tset_guess(&input);
+        g.set_guess(&input);
 		if (g.tcheck_guess())
         {
             g.print_guess();
