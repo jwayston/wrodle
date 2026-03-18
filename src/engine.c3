@@ -132,7 +132,7 @@ fn void? Game.init(&self, Allocator* alloc, usz word_len)
                 Color.GREEN.ansi, Color.GRAY.ansi, Color.GRAY.ansi,
                 Color.YELLOW.ansi, Color.GRAY.ansi, Color.YELLOW.ansi,
                 Color.RESET.ansi);
-    io::printfn("Try to guess the %d-letter word. After each attempt, you will"
+    io::printfn("Try to guess the %d-letter word. After each attempt, you will "
                 "receive hints indicating how close you were.\n", self.word_len);
 }
 
