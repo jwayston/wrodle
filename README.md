@@ -4,6 +4,8 @@ A very simple command line wordle-like word guessing game made with C3.
 
 During each run, it selects a random word from an internal list of approximately 5,500 words. Every guess must also be a valid word from that list.
 
+## Demo
+
 ![Screenshot](screenshot.png)
 
 ## Usage
