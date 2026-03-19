@@ -40,7 +40,7 @@ struct Game
 <*
     Takes user input. On invalid input repeats asking until valid. 
 
-    @param prompt : "Prompt shown before user input"
+    @param [&in] prompt : "Prompt shown before user input"
     @param len_min : "Minimun length allowed for the user input"
     @param len_max : "Maximum length allowed for the user input"
     @require len_min > 0, len_max >= len_min
@@ -61,7 +61,7 @@ fn String tuser_input(String* prompt, usz len_min, usz len_max)
 <*
     Init the game.
 
-    @param alloc : "Allocator used outside of temporary allocations"
+    @param [&in] alloc : "Allocator used outside of temporary allocations"
     @param word_len : "Word length that word lists and user inputs must obey"
     @require word_len > 1 : "Must be meaningful word length"
 
@@ -179,7 +179,7 @@ fn void Game.print_guess(&self)
 <*
     Set and store guess
 
-    @param guess : "Guess to be checked"
+    @param [&inout] guess : "Guess to be checked"
     @ensure guess.len == self.word_len
 *>
 fn void Game.set_guess(&self, String* guess)

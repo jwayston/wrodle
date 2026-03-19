@@ -5,8 +5,8 @@ import std::math;
 <*
     strcmp implementation, because c3lang stdlib does not seem to have it
 
-    @param a : "String A"
-    @param b : "String B"
+    @param [in] a : "String A"
+    @param [in] b : "String B"
 
     @return "< 0 if A is smaller than B, > 0 if A is greater than B" 
 *>
@@ -23,7 +23,7 @@ fn int strcmp(String a, String b)
 <*
     Binary search to find the word in the ordered preset word list
 
-    @param word : "Word to be checked"
+    @param [&in] word : "Word to be checked"
     @require word.len == WORDLEN
 
     @return "True if found, otherwise false"
@@ -49,7 +49,7 @@ fn bool is_word_in_list(String* word)
 <*
     Check if the word is a valid word (len == WORDLEN && present in WORDDATA)
 
-    @param w : "Word to be checked"
+    @param [&in] w : "Word to be checked"
     @return "true on valid, otherwise false"
 *>
 fn bool is_word_valid(String* w) => w.len != WORDLEN ? false : is_word_in_list(w);
