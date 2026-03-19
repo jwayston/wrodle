@@ -67,7 +67,7 @@ fn String tuser_input(String* prompt, usz len_min, usz len_max)
 
     @return "err~ on any failures"
 *>
-fn void? Game.init(&self, Allocator* alloc, usz word_len)
+fn void Game.init(&self, Allocator* alloc, usz word_len)
 {
     self.alloc = alloc;
     self.round = 1;

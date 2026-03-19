@@ -23,7 +23,7 @@ fn int main(String[] args)
     // alloc = &tracker;
 
 	Game g;
-    if (catch err = g.init(&alloc, 5)) io::printfn("Game init failed: %s", err);
+    g.init(&alloc, 5);
     defer g.free();
 
 	for (usz i = 0; i < GUESSES_MAX; i++) { @pool() 
