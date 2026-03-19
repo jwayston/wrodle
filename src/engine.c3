@@ -4,8 +4,8 @@
  */
 
 module engine;
+import words;
 import std::io;
-import std::math::random;
 import std::collections::list;
 
 faultdef INVALID_WORD;
@@ -38,31 +38,13 @@ struct Game
 }
 
 <*
-    Check if the word is a valid word (only characters a-z). Also checks 
-    that it is within length boundaries.
-
-    @param word : "Word to be checked"
-    @param len_min : "Minimum length allowed for the word"
-    @param len_max : "Maximum length allowed for the word"
-    @require len_min > 0, len_max >= len_min
-    @return "true on valid, otherwise false"
-*>
-fn bool is_word_valid(String* word, usz len_min, usz len_max)
-{
-    if (word.len > len_max || word.len < len_min) return false;
-    foreach(c : word) if (!c.is_alpha()) return false;
-    return true;
-}
-
-<*
-    Takes user input. On invalid input, repeats until valid is got. Validity
-    is judged by the max and min lengths and that the word contains only
-    characters a-z.
+    Takes user input. On invalid input repeats asking until valid. 
 
     @param prompt : "Prompt shown before user input"
     @param len_min : "Minimun length allowed for the user input"
     @param len_max : "Maximum length allowed for the user input"
     @require len_min > 0, len_max >= len_min
+
     @return "User input"
 *>
 fn String tuser_input(String* prompt, usz len_min, usz len_max)
@@ -71,35 +53,9 @@ fn String tuser_input(String* prompt, usz len_min, usz len_max)
 	{
         io::printf("%s", *prompt);
 		String input = io::treadline()!!;
-        if (is_word_valid(&input, len_min, len_max)) return input;
-		io::printf("Invalid input \x1b[1F\x1b[2K");
+        if (words::is_word_valid(&input)) return input;
+		io::printf("Invalid input or word does not exist\x1b[1F\x1b[2K");
 	}
-}
-
-<*
-    Picks random word from a text file. Every word must be separated by newline.
-    Only word that meets requirements is returned succesfully, otherwise
-    INVALID_WORD~. Requirements are word_len and that the word consists of only
-    characters a-z.
-
-    @param filename : "File path"
-    @param word_len : "Length that the word must be"
-    @require word_len > 0
-    @return "Word that meets the requirements"
-*>
-fn String? trandom_word_from_file(String* filename, usz word_len)
-{
-    char[]? file_data = file::load(tmem, *filename);
-    if (catch err = file_data) return err~;
-
-    // Split content to slices that represent lines in the file
-    String file_content = (String)file_data;
-    String[] file_content_lines = file_content.split(tmem, "\n");
-
-    // Pick random line and return
-    uint word_no = random::rand(file_content_lines.len - 1);
-    String result = file_content_lines[word_no].tcopy();
-    return is_word_valid(&result, word_len, word_len) ? result : INVALID_WORD~;
 }
 
 <*
@@ -107,24 +63,18 @@ fn String? trandom_word_from_file(String* filename, usz word_len)
 
     @param alloc : "Allocator used outside of temporary allocations"
     @param word_len : "Word length that word lists and user inputs must obey"
+    @require word_len > 1 : "Must be meaningful word length"
+
     @return "err~ on any failures"
 *>
 fn void? Game.init(&self, Allocator* alloc, usz word_len)
 {
-    assert(word_len > 1, "Word length must be meaningful ( > 1 )");
-    String word_file = "wordlist.txt";
     self.alloc = alloc;
-
-    @pool()
-    {
-        String? word = trandom_word_from_file(&word_file, word_len);
-        if (catch err = word) return err~;
-        self.word = word.copy(*alloc);
-    };
-
     self.round = 1;
+
     mem::set(&self.used_chars, ' ', self.used_chars.len);
     self.word_len = word_len;
+    self.word = words::random_word_from_list().copy(*alloc);
     self.word.convert_to_upper();
 
     io::printfn("%s W %s R %s O %s D %s L %s E %s\n",
@@ -185,7 +135,7 @@ fn bool Game.tcheck_guess(&self)
 
 <*
     Print characters that has been used in guesses so far and colorize them
-    according to their state (HIT, MISS, WRONG)
+    according to their current state (HIT, MISS, WRONG)
 *>
 fn void Game.print_used_chars(&self)
 {
@@ -209,15 +159,14 @@ fn void Game.print_used_chars(&self)
 }
 
 <*
-    Print user guess and colorize the characters according to their state (HIT,
-    MISS, WRONG)
+    Print user guess and colorize the characters according to their state
+    (HIT, MISS, WRONG)
+
+    @require self.hit_mask.is_initialized() : "hit_mask is not initialized"
+    @require !self.hit_mask.is_empty() : "hit_mask must be set"
 *>
 fn void Game.print_guess(&self)
 {
-    assert(self.hit_mask.is_initialized(), "self.hit_mask is not initialized()");
-    assert(!self.hit_mask.is_empty(), "self.hit_mask must be set");
-    assert(self.guess, "self.guess is not initialized");
-
 	for (usz i = 0; i < self.word_len; i++)
 	{
 		io::printf("%s %c %s", self.hit_mask[i].color.ansi, self.guess[i], Color.RESET.ansi);

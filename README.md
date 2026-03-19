@@ -2,7 +2,7 @@
 
 A very simple command line wordle-like word guessing game made with C3.
 
-On every run it picks a random word from `wordlist.txt`.
+During each run, it selects a random word from an internal list of approximately 5,500 words. Every guess must also be a valid word from that list.
 
 ![Screenshot](screenshot.png)
 
@@ -13,5 +13,7 @@ c3c build
 ./build/wrodle
 ```
 
-or simply `c3c run`
+or simply
+
+```c3c run```
 
