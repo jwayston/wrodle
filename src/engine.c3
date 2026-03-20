@@ -19,14 +19,12 @@ enum ChState : (String color)
 
 struct Game
 {
-    Allocator alloc;
     String word;
     usz round;
 }
 
 struct Guess
 {
-    Allocator alloc;
     String word;
     List {ChState} hit_mask;
     char[26] used_chars;
@@ -55,17 +53,12 @@ fn String tuser_input(String prompt, usz len_min, usz len_max)
 
 <*
     Init the game.
-
-    @param [in] alloc
-
-    @return "err~ on any failures"
 *>
-fn void Game.init(&self, Allocator alloc)
+fn void Game.init(&self)
 {
-    self.alloc = alloc;
     self.round = 1;
 
-    self.word = words::random_word_from_list().copy(alloc);
+    self.word = words::random_word_from_list().copy(mem);
     self.word.convert_to_upper();
 
     io::printfn("%s W %s R %s O %s D %s L %s E %s\n",
@@ -75,9 +68,8 @@ fn void Game.init(&self, Allocator alloc)
                 "receive hints indicating how close you were.\n", self.word.len);
 }
 
-fn void Guess.init(&self, Allocator alloc)
+fn void Guess.init(&self)
 {
-    self.alloc = alloc;
     mem::set(&self.used_chars, ' ', self.used_chars.len);
 }
 
@@ -89,10 +81,10 @@ fn void Guess.init(&self, Allocator alloc)
 *>
 fn void Guess.set(&self, String guess)
 {
-    if (self.word.ptr) self.word.free(self.alloc);
-    if (!self.hit_mask.is_initialized()) self.hit_mask.init(self.alloc, guess.len);
+    if (self.word) self.word.free(mem);
+    if (!self.hit_mask.is_initialized()) self.hit_mask.init(mem, guess.len);
 
-	self.word = guess.copy(self.alloc);
+	self.word = guess.copy(mem);
     self.word.convert_to_upper();
 }
 
@@ -113,7 +105,7 @@ fn bool Guess.tcheck(&self, String against)
     usz hit_count = 0;
 
 	// Find exact matches
-	for (usz i = 0; i < self.word.len; i++)
+    foreach (i, c : self.word)
 	{
         used.insert_at(i, false);
 		self.hit_mask.insert_at(i, WRONG);
@@ -192,7 +184,7 @@ fn void Guess.print_used_chars(&self)
 *>
 fn void Guess.free(&self)
 {
-    self.word.free(self.alloc);
+    self.word.free(mem);
     self.hit_mask.free();
 }
 
@@ -201,7 +193,7 @@ fn void Guess.free(&self)
 *>
 fn void Game.free(&self)
 {
-    self.word.free(self.alloc);
+    self.word.free(mem);
 }
 
 

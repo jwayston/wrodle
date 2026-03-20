@@ -20,11 +20,11 @@ fn int main(String[] args)
     // mem::@report_heap_allocs_in_scope() 
     {
 	Game game;
-    game.init(mem);
+    game.init();
     defer game.free();
 
     Guess guess;
-    guess.init(mem);
+    guess.init();
     defer guess.free();
 
     // Game loop
