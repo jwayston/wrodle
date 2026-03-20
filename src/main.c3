@@ -14,22 +14,17 @@ const usz GUESSES_MAX = 6;
 
 fn int main(String[] args)
 {
-    Allocator alloc = mem;
     // ┌──────────────────────────────────────────────────────────────────┐
     // │ UNCOMMENT BELOW TO ENABLE MEMORY TRACKING FOR DEBUGGING PURPOSES │
     // └──────────────────────────────────────────────────────────────────┘
-    // TrackingAllocator tracker;
-    // tracker.init(mem);
-    // defer tracker.free();
-    // defer tracker.print_report();
-    // alloc = &tracker;
-
+    // mem::@report_heap_allocs_in_scope() 
+    {
 	Game game;
-    game.init(alloc);
+    game.init(mem);
     defer game.free();
 
     Guess guess;
-    guess.init(alloc);
+    guess.init(mem);
     defer guess.free();
 
     // Game loop
@@ -50,6 +45,7 @@ fn int main(String[] args)
         game.round++;
 	}; }
 
+    };
     io::printn("Press enter to quit. ");
     io::stdin().read_byte()!!;
 	return 0;
