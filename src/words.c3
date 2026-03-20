@@ -23,12 +23,12 @@ fn int strcmp(String a, String b)
 <*
     Binary search to find the word in the ordered preset word list
 
-    @param [&in] word : "Word to be checked"
+    @param [in] word : "Word to be checked"
     @require word.len == WORDLEN
 
     @return "True if found, otherwise false"
 *>
-fn bool is_word_in_list(String* word)
+fn bool is_word_in_list(String word)
 {
     usz bottom = 0;
     usz top = WORDS - 1;
@@ -38,8 +38,8 @@ fn bool is_word_in_list(String* word)
         usz middle = bottom + (top - bottom) / 2;
         String word_compare = (String)WORDDATA[middle * 5 : 5];
 
-        if (word_compare == *word) return true;
-        if (strcmp(*word, word_compare) < 0) { top = middle - 1; }
+        if (word_compare == word) return true;
+        if (strcmp(word, word_compare) < 0) { top = middle - 1; }
         else { bottom = middle + 1; }
     }
 
@@ -49,10 +49,10 @@ fn bool is_word_in_list(String* word)
 <*
     Check if the word is a valid word (len == WORDLEN && present in WORDDATA)
 
-    @param [&in] w : "Word to be checked"
+    @param [in] w : "Word to be checked"
     @return "true on valid, otherwise false"
 *>
-fn bool is_word_valid(String* w) => w.len != WORDLEN ? false : is_word_in_list(w);
+fn bool is_word_valid(String w) => w.len != WORDLEN ? false : is_word_in_list(w);
 
 <*
     Picks a random word from the preset word list
@@ -63,6 +63,7 @@ fn String random_word_from_list() => (String)WORDDATA[random::rand(WORDS - 1) * 
 
 const usz WORDLEN = 5;
 const usz WORDS = WORDDATA.len / WORDLEN;
+
 const char[] WORDDATA= 
 "aargh"
 "abaca"

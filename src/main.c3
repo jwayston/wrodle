@@ -4,11 +4,13 @@
  */
 
 module wrodle;
+import engine;
+import words;
+
 import std::io;
 import std::math::random;
-import engine;
 
-const usz GUESSES_MAX = 6;
+const usz GUESSES_MAX = 2;
 
 fn int main(String[] args)
 {
@@ -22,24 +24,30 @@ fn int main(String[] args)
     // defer tracker.print_report();
     // alloc = &tracker;
 
-	Game g;
-    g.init(&alloc, 5);
-    defer g.free();
+	Game game;
+    game.init(alloc);
+    defer game.free();
 
+    Guess guess;
+    guess.init(alloc);
+    defer guess.free();
+
+    // Game loop
 	for (usz i = 0; i < GUESSES_MAX; i++) { @pool() 
     {
-        String prompt = string::tformat("Guess %s: ", g.round);
-		String input = engine::tuser_input(&prompt, g.word_len, g.word_len);
+        String prompt = string::tformat("Guess %s: ", game.round);
+		String input = engine::tuser_input(prompt, words::WORDLEN, words::WORDLEN);
 
-        g.set_guess(&input);
-		if (g.tcheck_guess())
+        guess.set(input);
+		if (guess.tcheck(game.word))
         {
-            g.print_guess();
+            guess.print();
             io::printn("\nCorrect answer!");
             break;
         }
 
-        g.print_guess();
+        guess.print();
+        game.round++;
 	}; }
 
     io::printn("Press enter to quit. ");
