@@ -1,3 +1,8 @@
+/*
+ * Copyright 2026–present, J Wayston
+ * Distributed under the MIT License (http://opensource.org/licenses/MIT)
+ */
+
 module words;
 import std::io;
 import std::math;
