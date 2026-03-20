@@ -10,7 +10,7 @@ import words;
 import std::io;
 import std::math::random;
 
-const usz GUESSES_MAX = 2;
+const usz GUESSES_MAX = 6;
 
 fn int main(String[] args)
 {
@@ -33,7 +33,7 @@ fn int main(String[] args)
     defer guess.free();
 
     // Game loop
-	for (usz i = 0; i < GUESSES_MAX; i++) { @pool() 
+    while (game.round <= GUESSES_MAX) { @pool() 
     {
         String prompt = string::tformat("Guess %s: ", game.round);
 		String input = engine::tuser_input(prompt, words::WORDLEN, words::WORDLEN);
