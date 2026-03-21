@@ -8,7 +8,6 @@ import engine;
 import words;
 
 import std::io;
-import std::math::random;
 
 const usz GUESSES_MAX = 6;
 

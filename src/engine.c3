@@ -5,10 +5,9 @@
 
 module engine;
 import words;
+
 import std::io;
 import std::collections::list;
-
-faultdef INVALID_WORD;
 
 enum ChState : (String color)
 {
