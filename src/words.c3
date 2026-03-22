@@ -33,19 +33,22 @@ fn int strcmp(String a, String b)
 
     @return "True if found, otherwise false"
 *>
-fn bool is_word_in_list(String word)
+fn bool is_word_in_list(String word) => @pool()
 {
-    usz bottom = 0;
-    usz top = WORDS - 1;
+    isz bottom = 0;
+    isz top = WORDS - 1;
+
+    String tmp_word = word.tcopy();
+    tmp_word.convert_to_lower();
 
     while (bottom <= top)
     {
         usz middle = bottom + (top - bottom) / 2;
         String word_compare = (String)WORDDATA[middle * 5 : 5];
 
-        if (word_compare == word) return true;
-        if (strcmp(word, word_compare) < 0) { top = middle - 1; }
-        else { bottom = middle + 1; }
+        if (word_compare == tmp_word) return true;
+        if (strcmp(word_compare, tmp_word) < 0) { bottom = middle + 1; }
+        else { top = middle - 1; }
     }
 
     return false;
