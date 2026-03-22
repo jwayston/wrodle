@@ -4,12 +4,23 @@
  */
 
 module wrodle;
+
 import engine;
 import words;
-
 import std::io;
 
 const usz GUESSES_MAX = 6;
+
+fn void banner()
+{
+    io::printfn("%s W %s R %s O %s D %s L %s E %s\n",
+                ChState.HIT.color, ChState.WRONG.color, ChState.WRONG.color,
+                ChState.MISS.color, ChState.WRONG.color, ChState.MISS.color,
+                Ansi.RESET);
+    io::printfn("Try to guess the %d-letter word. After each attempt, you will "
+                "receive hints indicating how close you were. You have %d "
+                "guesses.\n", words::WORDLEN, GUESSES_MAX); 
+}
 
 fn int main(String[] args)
 {
@@ -25,6 +36,8 @@ fn int main(String[] args)
     Guess guess;
     guess.init();
     defer guess.free();
+
+    banner();
 
     // Game loop
     while (game.round <= GUESSES_MAX) { @pool() 

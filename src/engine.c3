@@ -59,12 +59,6 @@ fn void Game.init(&self)
 
     self.word = words::random_word_from_list().copy(mem);
     self.word.convert_to_upper();
-
-    io::printfn("%s W %s R %s O %s D %s L %s E %s\n",
-                ChState.HIT.color, ChState.WRONG.color, ChState.WRONG.color,
-                ChState.MISS.color, ChState.WRONG.color, ChState.MISS.color, Ansi.RESET);
-    io::printfn("Try to guess the %d-letter word. After each attempt, you will "
-                "receive hints indicating how close you were.\n", self.word.len);
 }
 
 fn void Guess.init(&self)
