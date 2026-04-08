@@ -35,8 +35,8 @@ fn int strcmp(String a, String b)
 *>
 fn bool is_word_in_list(String word) => @pool()
 {
-    isz bottom = 0;
-    isz top = WORDS - 1;
+    sz bottom = 0;
+    sz top = WORDS - 1;
 
     String tmp_word = word.tcopy();
     tmp_word.convert_to_lower();
@@ -67,7 +67,7 @@ fn bool is_word_valid(String w) => w.len != WORDLEN ? false : is_word_in_list(w)
 
     @return "A random word"
 *>
-fn String random_word_from_list() => (String)WORDDATA[random::rand(WORDS - 1) * WORDLEN : WORDLEN];
+fn String random_word_from_list() => (String)WORDDATA[(ulong)random::rand(WORDS - 1) * WORDLEN : WORDLEN];
 
 const usz WORDLEN = 5;
 const usz WORDS = WORDDATA.len / WORDLEN;
